@@ -116,6 +116,7 @@ document.body.appendChild(renderer.domElement)
 // __controls__
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
+controls.autoRotate = true
 
 const dirLight = new THREE.DirectionalLight(0xffffff, 3.5)
 dirLight.position.set(3, 5, 1)
