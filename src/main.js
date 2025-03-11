@@ -61,7 +61,7 @@ const box = new THREE.Mesh(new THREE.BoxGeometry(2.01, 2.01, 2.01), material)
 scene.add(box)
 
 const gltfLoader = new GLTFLoader()
-gltfLoader.load('/models/prova-fraction.glb', (gltf) => {
+gltfLoader.load('/models/fractured-cube.glb', (gltf) => {
 	console.log(gltf)
 
 	gltf.scene.traverse((el) => {
