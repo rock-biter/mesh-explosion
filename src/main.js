@@ -29,7 +29,7 @@ const material = new THREE.ShaderMaterial({
 	vertexShader,
 })
 
-const box = new THREE.Mesh(new THREE.BoxGeometry(2.01, 2.01, 2.01), material)
+const box = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), material)
 // box.position.set(0.5, 0, 0)
 scene.add(box)
 
