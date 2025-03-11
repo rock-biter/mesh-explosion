@@ -15,8 +15,36 @@ import { lerp } from 'three/src/math/MathUtils.js'
  * Debug
  */
 // __gui__
-const config = {}
+const config = {
+	progress: 0,
+	distance: 5,
+}
 const pane = new Pane()
+
+pane
+	.addBinding(config, 'progress', {
+		min: 0,
+		max: 1,
+		step: 0.01,
+	})
+	.on('change', (ev) => {
+		// material.uniforms.uProgress.value = ev.value
+		// if (ev.value > 0) {
+		// 	box.visible = false
+		// } else {
+		// 	box.visible = true
+		// }
+	})
+
+pane
+	.addBinding(config, 'distance', {
+		min: 1,
+		max: 10,
+		step: 0.05,
+	})
+	.on('change', (ev) => {
+		material.uniforms.uDistance.value = ev.value
+	})
 
 /**
  * Scene
@@ -27,11 +55,29 @@ const scene = new THREE.Scene()
 const material = new THREE.ShaderMaterial({
 	fragmentShader,
 	vertexShader,
+	uniforms: {
+		uProgress: { value: config.progress },
+		uDistance: { value: config.distance },
+	},
 })
 
-const box = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 2), material)
+const box = new THREE.Mesh(new THREE.BoxGeometry(2.01, 2.01, 2.01), material)
 // box.position.set(0.5, 0, 0)
 scene.add(box)
+
+const gltfLoader = new GLTFLoader()
+
+gltfLoader.load('/models/fractured-cube.glb', (gltf) => {
+	console.log(gltf)
+
+	gltf.scene.traverse((el) => {
+		if (el instanceof THREE.Mesh) {
+			el.material = material
+		}
+	})
+
+	scene.add(gltf.scene)
+})
 
 /**
  * render sizes
@@ -71,6 +117,10 @@ document.body.appendChild(renderer.domElement)
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
 
+const dirLight = new THREE.DirectionalLight(0xffffff, 3.5)
+dirLight.position.set(3, 5, 1)
+scene.add(dirLight)
+
 /**
  * Three js Clock
  */
@@ -91,6 +141,18 @@ function tic() {
 	 * tempo totale trascorso dall'inizio
 	 */
 	// const time = clock.getElapsedTime()
+
+	material.uniforms.uProgress.value = lerp(
+		material.uniforms.uProgress.value,
+		config.progress,
+		dt * 3
+	)
+
+	if (material.uniforms.uProgress.value > 0.01) {
+		box.visible = false
+	} else {
+		box.visible = true
+	}
 
 	// __controls_update__
 	controls.update(dt)
