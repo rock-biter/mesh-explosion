@@ -70,7 +70,7 @@ scene.add(
 )
 
 const gltfLoader = new GLTFLoader()
-gltfLoader.load('/models/prova-fraction.glb', (gltf) => {
+gltfLoader.load('/models/fractured-cube.glb', (gltf) => {
 	console.log(gltf)
 
 	gltf.scene.traverse((el) => {
@@ -120,7 +120,7 @@ document.body.appendChild(renderer.domElement)
 const controls = new OrbitControls(camera, renderer.domElement)
 controls.enableDamping = true
 controls.autoRotate = true
-controls.autoRotateSpeed = 8
+controls.autoRotateSpeed = 4
 
 /**
  * Three js Clock
